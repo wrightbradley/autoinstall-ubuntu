@@ -1,0 +1,237 @@
+#cloud-config
+autoinstall:
+  version: 1
+  updates: security
+  apt:
+    disable_components: []
+    geoip: true
+    preserve_sources_list: false
+    primary:
+      - arches:
+          - amd64
+          - i386
+        uri: http://us.archive.ubuntu.com/ubuntu
+      - arches:
+          - default
+        uri: http://ports.ubuntu.com/ubuntu-ports
+  packages:
+    - mosh
+    - neovim
+    - tmux
+  package_update: true
+  package_upgrade: true
+  drivers:
+    install: false
+  identity:
+    hostname: macmini
+    realname: bwright
+    username: bwright
+  kernel:
+    package: linux-generic
+  keyboard:
+    layout: us
+    toggle: null
+    variant: ""
+  locale: en_US.UTF-8
+  network:
+    ethernets:
+      enp1s0f0:
+        dhcp4: true
+    version: 2
+  snaps:
+    - channel: stable
+      classic: false
+      name: canonical-livepatch
+  source:
+    id: ubuntu-server-minimal
+    search_drivers: true
+  ssh:
+    allow-pw: false
+    authorized-keys:
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDCeauGf2WNbKIu1jQf/HC4EUk89b01EGc9floXIsBMZngFNyIA4lmGOmksFApEM+WX7LvnCgxGqSEs01jxveRdoUUKOk9SFSH6xn1/sr/nMiw8wOkLEKrF4GY5Low24f+qfFoWvWhGJXAxS0N58L0nsjmlE09/+bqNy1tWVhzC56/zJYJV/cU4rDiJaTX4Lcn5DwdO0klpEafduy3BxYdE/7i7saDpGcHA1I9+fcCiVYg3HLWDyZeMQHJYXcVdxixhZA7au4LD9piEeCOmXOa4rOG5za7PKNodT1U+3W3eQRxlRDveeaDLaJZ3rOF1kgCbR1K9HSzGRMbruQ0jkMGOuvRRdVcStdHSKJ6GJ8snuo10nB0XKAGwlzsSRNcJr7ZaBPepqimL6LdUPNNb2d9D8j2Y1rQOnW2oKaF/EcS5kjoz0PlBuewVUq7c+es98I8RoXPuprTtWcnZqoOWShBQzBNWLBb49USnsFWMjkhCv+8u1fm41m0+ooXuSZpDaa8wNipE0bhOVMVCLRwv+eYp0jZbyJ1QRTpqbEM8BRjmV18JKbZokyAZR68hXWgSXkLi9R+JqOZVgP7ajs1y9ajTvZ2u158I+UBfm3cCI/R7T8QUp72UBWgxIFtm9uEqwjwvbDpp7uXpZ6XHXHUwBKWlZBA3Ay436K2i9Ae356WSGQ==
+        wrightbradley@github/34631368 # ssh-import-id gh:wrightbradley"
+      - ""
+      - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJKZI+oEzf46fn2Bs3UycH6HVkLXPOxNH2d1JU3YJ7yB
+        wrightbradley@github/66772981 # ssh-import-id gh:wrightbradley"
+      - ""
+      - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINq6bL/XvvoN1JwPQMydDR+wS2KhfsOc4KPlBoUoWiTP
+        wrightbradley@github/72623060 # ssh-import-id gh:wrightbradley"
+      - ""
+      - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHX6ti8oMHgUYqzu7Gcwho4R4/AnFJhs7A7OhVbn0x5I
+        wrightbradley@github/74153417 # ssh-import-id gh:wrightbradley"
+    install-server: true
+  storage:
+    config:
+      - ptable: gpt
+        serial: SSD_1TB_AA202209270000000773
+        path: /dev/sda
+        wipe: superblock-recursive
+        preserve: false
+        name: ""
+        grub_device: false
+        type: disk
+        id: disk-sda
+      - device: disk-sda
+        size: 1127219200
+        wipe: superblock
+        flag: boot
+        number: 1
+        preserve: false
+        grub_device: true
+        offset: 1048576
+        type: partition
+        id: partition-0
+      - fstype: fat32
+        volume: partition-0
+        preserve: false
+        type: format
+        id: format-0
+      - device: disk-sda
+        size: 2147483648
+        wipe: superblock
+        number: 2
+        preserve: false
+        grub_device: false
+        offset: 1128267776
+        type: partition
+        id: partition-1
+      - fstype: ext4
+        volume: partition-1
+        preserve: false
+        type: format
+        id: format-1
+      - device: disk-sda
+        size: 1020932390912
+        wipe: superblock
+        number: 3
+        preserve: false
+        grub_device: false
+        offset: 3275751424
+        type: partition
+        id: partition-2
+      - name: ubuntu-vg
+        devices:
+          - partition-2
+        preserve: false
+        type: lvm_volgroup
+        id: lvm_volgroup-0
+      - name: ubuntu-lv-root
+        volgroup: lvm_volgroup-0
+        size: 10737418240B
+        wipe: superblock
+        preserve: false
+        type: lvm_partition
+        id: lvm_partition-0
+      - name: ubuntu-lv-home
+        volgroup: lvm_volgroup-0
+        size: 21474836480B
+        wipe: superblock
+        preserve: false
+        type: lvm_partition
+        id: lvm_partition-1
+      - fstype: xfs
+        volume: lvm_partition-1
+        preserve: false
+        type: format
+        id: format-4
+      - name: ubuntu-lv-usr
+        volgroup: lvm_volgroup-0
+        size: 21474836480B
+        wipe: superblock
+        preserve: false
+        type: lvm_partition
+        id: lvm_partition-2
+      - fstype: xfs
+        volume: lvm_partition-2
+        preserve: false
+        type: format
+        id: format-5
+      - name: ubuntu-lv-var
+        volgroup: lvm_volgroup-0
+        size: 10737418240B
+        wipe: superblock
+        preserve: false
+        type: lvm_partition
+        id: lvm_partition-3
+      - fstype: xfs
+        volume: lvm_partition-3
+        preserve: false
+        type: format
+        id: format-6
+      - name: ubuntu-lv-varlib
+        volgroup: lvm_volgroup-0
+        size: 21474836480B
+        wipe: superblock
+        preserve: false
+        type: lvm_partition
+        id: lvm_partition-4
+      - fstype: xfs
+        volume: lvm_partition-4
+        preserve: false
+        type: format
+        id: format-7
+      - name: ubuntu-lv-varlog
+        volgroup: lvm_volgroup-0
+        size: 10737418240B
+        wipe: superblock
+        preserve: false
+        type: lvm_partition
+        id: lvm_partition-5
+      - fstype: xfs
+        volume: lvm_partition-5
+        preserve: false
+        type: format
+        id: format-8
+      - name: ubuntu-lv-tmp
+        volgroup: lvm_volgroup-0
+        size: 10737418240B
+        wipe: superblock
+        preserve: false
+        type: lvm_partition
+        id: lvm_partition-6
+      - fstype: xfs
+        volume: lvm_partition-6
+        preserve: false
+        type: format
+        id: format-9
+      - fstype: xfs
+        volume: lvm_partition-0
+        preserve: false
+        type: format
+        id: format-10
+      - path: /
+        device: format-10
+        type: mount
+        id: mount-10
+      - path: /boot
+        device: format-1
+        type: mount
+        id: mount-1
+      - path: /boot/efi
+        device: format-0
+        type: mount
+        id: mount-0
+      - path: /home
+        device: format-4
+        type: mount
+        id: mount-4
+      - path: /usr
+        device: format-5
+        type: mount
+        id: mount-5
+      - path: /var
+        device: format-6
+        type: mount
+        id: mount-6
+      - path: /var/lib
+        device: format-7
+        type: mount
+        id: mount-7
+      - path: /var/log
+        device: format-8
+        type: mount
+        id: mount-8
+      - path: /tmp
+        device: format-9
+        type: mount
+        id: mount-9
