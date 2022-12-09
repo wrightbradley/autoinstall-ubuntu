@@ -14,4 +14,4 @@ This will result in an Ubuntu ISO called: `ubuntu-22.10-autoinstall.iso`
 
 ## Configuration
 
-To configure the details for autoinstall/cloud-init modify the `user-data` file.
+To configure the details for [autoinstall](./docs/autoinstall.md) and [cloud-init](./docs/cloud-init.md) modify the `user-data` file.
